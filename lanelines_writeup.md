@@ -24,21 +24,8 @@ The goals / steps of this project are the following:
 [image9]: ./examples/user_added/color_threshold_imgs.png "Color Threshold"
 [image10]: ./examples/user_added/gradient_threshold_imgs.png "Gradient Threshold"
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
 
-## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
-
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
----
-
-### Writeup / README
+## Writeup / README
 
 You're reading it!
 
@@ -69,11 +56,13 @@ For color threshold, I used the HLS, LAB, and LUV colorspaces to filter for whit
 * LS(both): MIN[0,100,90] MAX[40,255,255]
 * LAB(yellow): MIN[0,0,150] MAX[255,255,255]
 * LUV(white): MIN[210,0,0] MAX[255,255,255]
+
 You can find this in [Threshold.ipynb](./Camera-Calibration.ipynb) Code cell 10
+
 ![alt text][image9]
 
-For gradient threshold, I used a combination of sobel absolute, magnitude and direction filters.
-[Threshold.ipynb](./Camera-Calibration.ipynb) Code cell 8
+For gradient threshold, I used a combination of sobel absolute, magnitude and direction filters.  
+[Threshold.ipynb](./Camera-Calibration.ipynb) Code cell 8  
 * Absolute_X:[20,100]
 * Absolute_Y:[20,100]
 * Magnitude:[30,100]
@@ -81,7 +70,7 @@ For gradient threshold, I used a combination of sobel absolute, magnitude and di
 
 ![alt text][image10] 
 
-Here's an example of the combined gradient and color images.
+Here's an example of the combined gradient and color images.  
 (Color thresholding in blue, gradient threshold in green)
 
 ![alt text][image4]
@@ -111,13 +100,12 @@ def get_dst(img):
 ```
 
 
-720x1280
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 522, 504      | 100, -10      |
-| 205, 720      | 100, 720      |
-| 768, 504      | 1180, -10     |
-| 1107, 720     | 1180, 720     |
+| Source        | Destination   |  
+|:-------------:|:-------------:|  
+| 522, 504      | 100, -10      |  
+| 205, 720      | 100, 720      |  
+| 768, 504      | 1180, -10     |  
+| 1107, 720     | 1180, 720     |  
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
@@ -125,27 +113,27 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-I used a sliding window search on the threshold + perspective transformed image.
+I used a sliding window search on the threshold + perspective transformed image.  
 [LaneDrawing.ipynb](./LaneDrawing.ipynb) Code cell 11
 
-This method convolves a filter over an image region to find the area with the maximun number of ativated pixels. In the case of our images, the areas that are most activated AKA "window centroid" should be the lane lines.
+This method convolves a filter over an image region to find the area with the maximun number of ativated pixels. In the case of our images, the areas that are most activated AKA "window centroid" should be the lane lines.  
 The image is separated into left and right regions to find their respective lane lines. We then move the filter horizontally on each region (starting from the bottom) to find the first window centroid. The next centroid is found by convolving the filter in the horizontal segment right above where the previous centroid was found.
 
-Here are the parameters I used:
-Window size - 70x90
-Margin - 70
-Filter - Gaussian
-Starting Left Region Search Area - (512, 480), (512, 720), (0, 720), (0, 480)
-Starting Right Region Search Area - (768, 480), (768, 720), (0, 720), (0, 480)
+Here are the parameters I used:  
+* Window size - 70x90
+* Margin - 70
+* Filter - Gaussian
+* Starting Left Region Search Area - (512, 480), (512, 720), (0, 720), (0, 480)
+* Starting Right Region Search Area - (768, 480), (768, 720), (0, 720), (0, 480)
 
 
-I used a gaussian filter over a ones-matrix so that the window location would be centered. With a ones filter, the window location will be slightly off if the window is too big or too small - multiple maximum locations.
+I used a gaussian filter over a ones-matrix so that the window location would be centered. With a ones filter, the window location will be slightly off if the window is too big or too small - multiple maximum locations.  
 The window centroid is discarded if it falls between a certain threshold (2500). The x-coordinate for the previous found centroid was used instead
 
 
 ![alt text][image6]
 
-A 2nd order polynomial was used to fit the window centroids.
+A 2nd order polynomial was used to fit the window centroids.  
 [LaneDrawing.ipynb](./LaneDrawing.ipynb) Code cell 12
 
 ![alt text][image7]
@@ -175,7 +163,7 @@ Here's a [link to my video result](./output_video/project_video_extended.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-I found that this pipeline could be fine tuned pretty well for a specific set of roads and conditions. However, it's much harder to find a set of parameters that work for the majority of the cases.
+I found that this pipeline could be fine tuned pretty well for a specific set of roads and conditions. However, it's much harder to find a set of parameters that work for the majority of the cases.  
 
 The pipeline fares poorly in the challenge video due to lots of changing conditions. Here are a few obvious problems:
 1. Shadows - guard rail shadows and bridge shadows
