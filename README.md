@@ -52,25 +52,28 @@ To demonstrate this step, I will describe how I apply the distortion correction 
 
 I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `Threshold.ipynb`).
 
-For color threshold, I used the HLS, LAB, and LUV colorspaces to filter for white and yellow lane lines. Here are the values:
+For **color threshold**, I used the HLS, LAB, and LUV colorspaces to filter for white and yellow lane lines. Here are the values:  
 * LS(both): MIN[0,100,90] MAX[40,255,255]
 * LAB(yellow): MIN[0,0,150] MAX[255,255,255]
 * LUV(white): MIN[210,0,0] MAX[255,255,255]
 
-You can find this in [Threshold.ipynb](./Camera-Calibration.ipynb) Code cell 10
+You can find this in [Threshold.ipynb](./Camera-Calibration.ipynb) - Code cell 10
+
 
 ![alt text][image9]
 
-For gradient threshold, I used a combination of sobel absolute, magnitude and direction filters.  
-[Threshold.ipynb](./Camera-Calibration.ipynb) Code cell 8  
+For **gradient threshold**, I used a combination of sobel absolute, magnitude and direction filters.  
+[Threshold.ipynb](./Camera-Calibration.ipynb) - Code cell 8  
 * Absolute_X:[20,100]
 * Absolute_Y:[20,100]
 * Magnitude:[30,100]
 * Direction:[.7,1.3]
 
+
 ![alt text][image10] 
 
-Here's an example of the combined gradient and color images.  
+
+Here's an example of the **combined image** of the gradient and color images.  
 (Color thresholding in blue, gradient threshold in green)
 
 ![alt text][image4]
@@ -114,7 +117,7 @@ I verified that my perspective transform was working as expected by drawing the 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
 I used a sliding window search on the threshold + perspective transformed image.  
-[LaneDrawing.ipynb](./LaneDrawing.ipynb) Code cell 11
+[LaneDrawing.ipynb](./LaneDrawing.ipynb) - Code cell 11
 
 This method convolves a filter over an image region to find the area with the maximun number of ativated pixels. In the case of our images, the areas that are most activated AKA "window centroid" should be the lane lines.  
 The image is separated into left and right regions to find their respective lane lines. We then move the filter horizontally on each region (starting from the bottom) to find the first window centroid. The next centroid is found by convolving the filter in the horizontal segment right above where the previous centroid was found.
@@ -134,7 +137,7 @@ The window centroid is discarded if it falls between a certain threshold (2500).
 ![alt text][image6]
 
 A 2nd order polynomial was used to fit the window centroids.  
-[LaneDrawing.ipynb](./LaneDrawing.ipynb) Code cell 12
+[LaneDrawing.ipynb](./LaneDrawing.ipynb) - Code cell 12
 
 ![alt text][image7]
 
@@ -178,4 +181,5 @@ The pipeline fares poorly in the challenge video due to lots of changing conditi
 
 ### Challenge
 
-Here's a [link to my video result](./output_video/challenge_video_1.mp4)
+Was not able to get a good result on the challenge.
+However, here's a [link to my video result](./output_video/challenge_video_1.mp4)
